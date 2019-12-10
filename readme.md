@@ -1,3 +1,2 @@
-# code-academy
-NodeJS project 
-Company Database with mySQL 
+# Code-Academy BackEnd project
+Company Database with mySQL and NodeJs

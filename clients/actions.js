@@ -111,6 +111,59 @@ updateClient = async (req, res) => {
         console.log("error");
     }
 }
+//Soft Delete client
+softDeleteQuery = (id) => {
+    const query = "UPDATE client SET deleted_at = now() where client_id = ?"
+    return new Promise((resolve, reject) => {
+        connection.query(query, [id], function (error, results, fields) {
+            if (error) {
+                reject(error)
+            } else {
+                if (results.affectedRows == 0) {
+                    reject(`No client found with client_id -> ${id}`)
+                } else {
+                    resolve(results)
+                }
+            }
+        })
+    })
+}
+
+softDelete = async (req, res) => {
+    try {
+        const softDeletedClient = await softDeleteQuery(req.params.id)
+        res.status(200).send(softDeletedClient)
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}
+
+undoSoftDeleteQuery = (id) => {
+    const query = "UPDATE client SET deleted_at = null where client_id = ?"
+    return new Promise((resolve, reject) => {
+        connection.query(query, [id], function (error, results, fields) {
+            if (error) {
+                reject(error)
+            } else {
+                if (results.affectedRows == 0) {
+                    reject(`No client found with id -> ${id}`)
+                } else {
+                    resolve(results)
+                }
+            }
+        })
+    })
+}
+
+undoSoftDelete = async (req, res) => {
+    try {
+        const undoSoftDeletedClient = await undoSoftDeleteQuery(req.params.id)
+        res.status(200).send(undoSoftDeletedClient)
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}
+
 
 //DELETE client
 deleteClientQuery = (id) => {
@@ -142,6 +195,7 @@ module.exports = {
     getSpecificClient,
     createClient,
     updateClient,
-    deleteClient
-
+    deleteClient,
+    undoSoftDelete,
+    softDelete
 }

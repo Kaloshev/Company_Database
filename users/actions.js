@@ -83,7 +83,6 @@ createUser = async (req, res) => {
     try {
         const userRequest = req.body;
         const passHash = bcrypt.hashSync(userRequest.password, 10);
-        // const createdUser = await createUserQuery(userRequest.email, passHash);
         const createdUser = await createUserQuery(req.body.email, passHash);
         res.status(200).send(createdUser)
     } catch (error) {
@@ -92,7 +91,7 @@ createUser = async (req, res) => {
     }
 }
 // }
-//update na userot , ali kako na hash passowrd bi mu pravel update, da go razmislam poubavo
+//update na userot
 updateUserQuery = (email, password, id) => {
     const query = "UPDATE user SET email = ?, password = ? , last_update = now() WHERE id = ?";
     return new Promise((resolve, reject) => {
@@ -101,7 +100,7 @@ updateUserQuery = (email, password, id) => {
                 reject(error)
             } else {
                 if (results.affectedRows == 0) {
-                    reject("Nema user so takvo ID")
+                    reject(`No user found with id -> ${id}`)
                     // console.log(results);
                 } else {
                     resolve(results)
@@ -120,6 +119,60 @@ updateUser = async (req, res) => {
     } catch (error) {
         res.status(500).send(error)
         console.log("error");
+    }
+}
+
+//Soft Delete user
+softDeleteQuery = (id) => {
+    // const query = "UPDATE user SET email = ?, password = admin, deleted_at = now() where id = ?"
+    const query = "UPDATE user SET deleted_at = now() where id = ?"
+    return new Promise((resolve, reject) => {
+        connection.query(query, [id], function (error, results, fields) {
+            if (error) {
+                reject(error)
+            } else {
+                if (results.affectedRows == 0) {
+                    reject(`No user found with id -> ${id}`)
+                } else {
+                    resolve(results)
+                }
+            }
+        })
+    })
+}
+
+softDelete = async (req, res) => {
+    try {
+        const softDeletedUser = await softDeleteQuery(req.params.id)
+        res.status(200).send(softDeletedUser)
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}
+
+undoSoftDeleteQuery = (id) => {
+    const query = "UPDATE user SET deleted_at = null where id = ?"
+    return new Promise((resolve, reject) => {
+        connection.query(query, [id], function (error, results, fields) {
+            if (error) {
+                reject(error)
+            } else {
+                if (results.affectedRows == 0) {
+                    reject(`No user found with id -> ${id}`)
+                } else {
+                    resolve(results)
+                }
+            }
+        })
+    })
+}
+
+undoSoftDelete = async (req, res) => {
+    try {
+        const undoSoftDeletedUser = await undoSoftDeleteQuery(req.params.id)
+        res.status(200).send(undoSoftDeletedUser)
+    } catch (error) {
+        res.status(500).send(error)
     }
 }
 
@@ -190,6 +243,8 @@ module.exports = {
     getSpecificUser,
     createUser,
     updateUser,
-    deleteUser
+    deleteUser,
+    softDelete,
+    undoSoftDelete
 
 }

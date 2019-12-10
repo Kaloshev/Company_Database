@@ -76,9 +76,31 @@ getGroupEmpByGender = async (req, res) => {
     }
 }
 
+getGroupEmpBySupervisorQuery = () => {
+    const query = "SELECT COUNT(super_id), super_id FROM employee GROUP BY super_id;"
+    return new Promise((resolve, reject) => {
+        connection.query(query, function (error, results, fields) {
+            if (error) {
+                reject(error)
+            } else {
+                resolve(results)
+            }
+        });
+    });
+}
+
+getGroupEmpBySupervisor = async (req, res) => {
+    try {
+        const groupEmpBySupervisor = await getGroupEmpBySupervisorQuery()
+        res.status(200).send(groupEmpBySupervisor)
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}
 
 module.exports = {
     getSpecificEmployee,
     updateEmployee,
-    getGroupEmpByGender
+    getGroupEmpByGender,
+    getGroupEmpBySupervisor
 }

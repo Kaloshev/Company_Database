@@ -1,0 +1,33 @@
+{
+  "name": "company-project",
+  "version": "1.0.0",
+  "description": "This is backend development for the final project at the Code Academy. ",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js",
+    "prod": "node index.js"
+  },
+  "keywords": [
+    "Company",
+    "DB",
+    "final",
+    "project",
+    "BackEnd"
+  ],
+  "author": "Gjorgji Kaloshev",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1",
+    "express-jwt": "^5.3.1",
+    "express-unless": "^0.5.0",
+    "jsonwebtoken": "^8.5.1",
+    "mysql": "github:mysqljs/mysql"
+  },
+  "devDependencies": {
+    "dotenv": "^8.2.0",
+    "nodemon": "^2.0.1"
+  }
+}

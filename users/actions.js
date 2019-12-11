@@ -195,12 +195,16 @@ deleteUser = async (req, res) => {
 getUserByEmailQuery = (email) => {
     const query = "SELECT * FROM user WHERE email = ?"
     return new Promise((resolve, reject) => {
-        conn.query(query, [email], function (error, results, fields) {
+        connection.query(query, [email], function (error, results, fields) {
             if (error) {
                 reject(error);
+                console.log("reject")
+
             } else {
                 console.log(results)
                 resolve(results);
+                console.log("results")
+
             };
         });
     });
@@ -218,7 +222,7 @@ logInUser = async (req, res) => {
             var token = jwt.sign({ newUser }, 'aaaa', { expiresIn: "1h" });
             // res.status(200).send("Password match");
             res.status(200).send(token);
-            console.log(matchPass);
+            // console.log(matchPass);
 
         } else {
             res.status(401).send("WRONG PASSWORD");
@@ -227,6 +231,8 @@ logInUser = async (req, res) => {
         }
     } catch (error) {
         res.status(500).send(error);
+        // console.log(error);
+        
     }
 }
 

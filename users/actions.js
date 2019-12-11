@@ -72,14 +72,7 @@ createUserQuery = (email, password) => {
         })
     })
 }
-//Da smislam podobar validator da vidam dali ima i dali ima potreba voopsto za validator na email
 createUser = async (req, res) => {
-    // var isValidEmail = validator.emailValidator(req.body.email);
-    // if (!isValidEmail) {
-    //     var error = new Error("E-mail is too short");
-    //     error.status = 401;
-    //     next(error)
-    // } else {
     try {
         const userRequest = req.body;
         const passHash = bcrypt.hashSync(userRequest.password, 10);
@@ -90,7 +83,7 @@ createUser = async (req, res) => {
         console.log(error)
     }
 }
-// }
+
 //update na userot
 updateUserQuery = (email, password, id) => {
     const query = "UPDATE user SET email = ?, password = ? , last_update = now() WHERE id = ?";

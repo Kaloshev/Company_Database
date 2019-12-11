@@ -27,9 +27,10 @@ getAllBranches = async (req, res) => {
 };
 
 getSpecificBranchQuery = (id) => {
-    const query = "SELECT * FROM branch WHERE branch_id = ?"
+    const query = `SELECT * FROM branch WHERE branch_id = ${id}`
+    //basic sqj injection 
     return new Promise((resolve, reject) => {
-        connection.query(query, [id], function (error, results, fields) {
+        connection.query(query, function (error, results, fields) {
             if (error) {
                 reject(error)
             } else {

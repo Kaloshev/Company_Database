@@ -5,7 +5,7 @@ var routes = express.Router();
 
 routes.get('/branch', actions.getAllBranches);
 routes.get('/branch/:id', actions.getSpecificBranch);
-routes.post('/branch/create', actions.createBranch);
+routes.post('/branch', actions.createBranch);
 routes.put('/branch/:id', actions.updateBranch);
 routes.delete("/branch/delete/:id", actions.deleteBranch)
 

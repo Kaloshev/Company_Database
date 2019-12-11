@@ -5,7 +5,7 @@ var routes = express.Router();
 
 routes.get('/users', actions.getAllUsers);
 routes.get('/users/:id', actions.getSpecificUser);
-routes.post('/users/create', actions.createUser);
+routes.post('/users', actions.createUser);
 routes.put('/users/:id', actions.updateUser);
 routes.put('/users/undosd/:id', actions.undoSoftDelete);
 routes.delete("/users/delete/:id", actions.deleteUser)

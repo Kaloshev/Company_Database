@@ -54,10 +54,10 @@ getSpecificClient = async (req, res, next) => {
 };
 
 //Create na client 
-createClientQuery = (client_name, branch_id) => {
-    const query = "INSERT INTO client(clinet_name, branch_id) VALUES (?,?)"
+createClientQuery = (client_id, client_name, branch_id) => {
+    const query = "INSERT INTO client(client_id,client_name, branch_id) VALUES (?,?,?)"
     return new Promise((resolve, reject) => {
-        connection.query(query, [client_name, branch_id], function (error, results, fields) {
+        connection.query(query, [client_id, client_name, branch_id], function (error, results, fields) {
             if (error) {
                 reject(error)
                 console.log(error);
@@ -74,7 +74,7 @@ createClientQuery = (client_name, branch_id) => {
 
 createClient = async (req, res) => {
     try {
-        const createdClient = await createClientQuery(req.body.client_name, req.body.branch_id);
+        const createdClient = await createClientQuery(req.body.client_id, req.body.client_name, req.body.branch_id);
         res.status(200).send(createdClient)
     } catch (error) {
         res.status(500).send(error);

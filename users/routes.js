@@ -1,9 +1,10 @@
 const express = require("express");
 const actions = require("./actions");
+const auth = require('../middleware/authentication')
 
 var routes = express.Router();
 
-routes.get('/users', actions.getAllUsers);
+routes.get('/users', [auth.checkToken,auth.verifyToken,auth.checkIfAdmin], actions.getAllUsers);
 routes.get('/users/:id', actions.getSpecificUser);
 routes.post('/users', actions.createUser);
 routes.put('/users/:id', actions.updateUser);

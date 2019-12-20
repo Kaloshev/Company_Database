@@ -98,9 +98,35 @@ getGroupEmpBySupervisor = async (req, res) => {
     }
 }
 
+getEmpByBranchAndClientsQuery = (id) => {
+    const query = "SELECT employee.first_name ,employee.last_name, branch.branch_name, client.client_name from employee \
+    JOIN branch ON branch.branch_id = employee.branch_id JOIN client on client.branch_id = branch.branch_id \
+    WHERE emp_id = ?";
+    return new Promise((resolve, reject) => {
+        connection.query(query, [id], function (error, results, fields) {
+            if (error) {
+                reject(error)
+            } else {
+                resolve(results)
+            }
+        });
+    });
+};
+
+getEmpByBranchAndClients = async (req, res) => {
+    try {
+        const empByBranchAndClients = await getEmpByBranchAndClientsQuery(req.params.id)
+        res.status(200).send(empByBranchAndClients)
+    } catch (error) {
+        res.status(500).send(error)
+    }
+}
+
 module.exports = {
     getSpecificEmployee,
     updateEmployee,
     getGroupEmpByGender,
-    getGroupEmpBySupervisor
+    getGroupEmpBySupervisor,
+    getEmpByBranchAndClients
+   
 }
